@@ -17,17 +17,26 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.Chronometer;
 import android.widget.TextView;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Calendar;
+import java.util.Date;
+
 
 public class MainActivity extends AppCompatActivity {
     private LocationManager locationManager;
     LocationListener locationListener;
+    Chronometer chronometer;
     String langlong;
     TextView lc;
     Button btnstart, btnstop;
@@ -43,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         lc = findViewById(R.id.locationttxt);
         setSupportActionBar(toolbar);
+        chronometer = findViewById(R.id.chronometer);
         btnstart = findViewById(R.id.btnstart);
         btnstop = findViewById(R.id.btnstop);
         locationListener = LocServices();
@@ -58,6 +68,8 @@ public class MainActivity extends AppCompatActivity {
                     locationManager.requestLocationUpdates("gps", 0, 100, locationListener);
                     btnstart.setVisibility(View.GONE);
                     btnstop.setVisibility(View.VISIBLE);
+                    chronometer.setBase(SystemClock.elapsedRealtime());
+                    chronometer.start();
                 }
 
             }
@@ -70,9 +82,30 @@ public class MainActivity extends AppCompatActivity {
                     locationManager.removeUpdates(locationListener);
                     // locationManager = null;
                     lc.setText("");
-                    distanceInMetres = 0;
                     btnstop.setVisibility(View.GONE);
                     btnstart.setVisibility(View.VISIBLE);
+                    Double elapsed = Double.valueOf(SystemClock.elapsedRealtime() - chronometer.getBase());
+                    Double avghr = ((elapsed / 1000) / 3600);
+                    Log.d("chrono Second", "" + (elapsed / 1000));
+                    Log.d("chrono hour", "" + avghr);
+                    Log.d("chrono distance in km", "" + distanceInMetres / 1000);
+
+                    Date currentTime = Calendar.getInstance().getTime();
+                    File f = new File(getFilesDir(), currentTime + ".txt");
+                    try {
+                        BufferedWriter bw = new BufferedWriter(new FileWriter(f));
+                        bw.write("Date and Time \t" + currentTime+"\n");
+                        bw.write("Distance Travelled \t" + distanceInMetres / 1000 + "\n");
+                        bw.write("Time Elapsed \t" + avghr);
+
+                        Log.d("ZALA", "GHE");
+                        bw.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    distanceInMetres = 0;
+
+                    chronometer.stop();
 
                 }
             }
@@ -192,4 +225,6 @@ public class MainActivity extends AppCompatActivity {
         final AlertDialog alert = builder.create();
         alert.show();
     }
+
+
 }
