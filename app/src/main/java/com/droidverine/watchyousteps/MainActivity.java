@@ -31,6 +31,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Timer;
@@ -44,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
     String langlong;
     TextView lc, TxttotalRun, Txtavgspeed, Txtavgspeedperkm;
     long eachkm;
+    ArrayList<Location> locationArrayList=new ArrayList<>();
     Double elapsed;
     Button btnstart, btnstop;
     static double distanceInMetres;
@@ -67,6 +69,13 @@ public class MainActivity extends AppCompatActivity {
         Txtavgspeed = findViewById(R.id.txtavgspeed);
         locationListener = LocServices();
         btnstop.setVisibility(View.GONE);
+        FloatingActionButton floatingActionButton=findViewById(R.id.fab);
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getApplicationContext(),GraphiewActivity.class));
+            }
+        });
 
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
@@ -94,6 +103,29 @@ public class MainActivity extends AppCompatActivity {
                 if (locationManager != null) {
                     chronometerkm.start();
                     locationManager.removeUpdates(locationListener);
+                    Float ds=0.0f;
+                    millisend = System.currentTimeMillis();
+
+                    for (int i=1;i<locationArrayList.size();i++)
+                    {
+                        Location nextloc=null;
+                   //     Log.d("Arrayofloc",""+locationArrayList.get(i));
+
+
+
+
+                        ds += locationArrayList.get(i-1).distanceTo(locationArrayList.get(i));
+
+                    }
+                    //For getting total distance travveled
+                    Log.d("Distanceala",""+ds);
+                    //For getting total travel time
+                    Log.d("Distaneala",""+(millisend - millistart) / 1000);
+
+                    //For getting avg speed over whole run.
+
+                    locationArrayList.clear();
+
                     // locationManager = null;
                     lc.setText("");
                     btnstop.setVisibility(View.GONE);
@@ -152,6 +184,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+                startActivity(new Intent(getApplicationContext(),GraphiewActivity.class));
 
             }
         });
@@ -195,6 +228,7 @@ public class MainActivity extends AppCompatActivity {
         locationListener = new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
+                locationArrayList.add(location);
                 langlong = String.valueOf(location.getLatitude());
                 Log.d("loc", "currentloc " + location);
                 Log.d("loc", "locationali " + lastLocation);
@@ -202,10 +236,19 @@ public class MainActivity extends AppCompatActivity {
 
                 if (lastLocation != null) {
                     distanceInMetres += location.distanceTo(lastLocation);
+                    lc.setText("" +distanceInMetres );
+
+                    if(distanceInMetres>1000)
+                    {
+                        distanceInMetres=0;
+                        Log.d("Eachkm","ghe");
+                    }
+
+                    /*
                     Log.d("loc", "locationali " + distanceInMetres);
                     eachkm = Math.round(distanceInMetres / 1000);
                     //to get every km
-                    if (distanceInMetres >= 1000) {
+                    if (eachkm > 1) {
                         Log.d("km complete", " km complete");
                         eachkm = 0;
                         millisend = System.currentTimeMillis();
@@ -220,6 +263,7 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                     lc.setText("" + (distanceInMetres / 1000));
+                    */
 
                 }
                 lastLocation = location;
