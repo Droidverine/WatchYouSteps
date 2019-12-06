@@ -14,24 +14,25 @@ android:gravity="center_vertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="32dp"
+        android:id="@+id/chronometerperkm"
+        android:visibility="gone"
+        android:layout_gravity="center"/>
+    <Chronometer
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="32dp"
         android:id="@+id/chronometer"
         android:layout_gravity="center"/>
+
    <TextView
        android:layout_width="match_parent"
        android:layout_height="wrap_content"
        android:textAlignment="center"
-       android:text="lavda"
+       android:text="Nothing Yet"
        android:textSize="25dp"
        android:id="@+id/locationttxt"
        android:layout_gravity="center"/>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textAlignment="center"
-        android:text="TImer"
-        android:textSize="25dp"
-        android:id="@+id/txttimer"
-        android:layout_gravity="center"/>
+
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -45,6 +46,44 @@ android:gravity="center_vertical"
         android:id="@+id/btnstop"
 
         android:layout_gravity="center"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:orientation="horizontal"
+        android:gravity="center">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Km travelled:"
+            android:textSize="24sp"
+            android:id="@+id/txttotalrun"
+            android:layout_margin="12dp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Avg speed"
+            android:id="@+id/txtavgspeed"
+
+            android:textSize="24sp"
+            android:layout_margin="12dp"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:orientation="horizontal"
+        android:gravity="center">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/txtavgspeedperkm"
+            android:text="Avg speed per km:"
+            android:textSize="24sp"
+            android:layout_margin="12dp"/>
+
+    </LinearLayout>
 
 
 
