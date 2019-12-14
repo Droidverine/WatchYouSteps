@@ -6,7 +6,9 @@
     android:layout_height="match_parent"
     tools:context=".GraphiewActivity">
     <com.droidverine.watchyousteps.GraphCusotmView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_width="wrap_content"
+        android:layout_height="320dp"
+        android:padding="12dp"
+      />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
