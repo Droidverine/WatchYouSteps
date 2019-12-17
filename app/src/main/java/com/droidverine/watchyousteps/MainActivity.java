@@ -18,6 +18,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.os.Environment;
 import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
@@ -81,7 +82,16 @@ public class MainActivity extends AppCompatActivity {
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(),GraphiewActivity.class));
+                String path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + getResources().getString(R.string.app_name);
+                Log.d("Files", "Path: " + getFilesDir());
+                File directory = new File(getFilesDir()+"/");
+                File[] files = directory.listFiles();
+                Log.d("Files", "Size: "+ files.length);
+                for (int i = 0; i < files.length; i++)
+                {
+                    Log.d("Files", "FileName:" + files[i].getName());
+                }
+             //   startActivity(new Intent(getApplicationContext(),GraphiewActivity.class));
             }
         });
 
@@ -120,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
                     millisend = System.currentTimeMillis();
                     Long timeperkm=((milliperkmend - milliperkmstart) / 1000);
 
-                    PerkmArraylist.add(1/(timeperkm/Double.valueOf(3600)));
+                  //  PerkmArraylist.add(1/(timeperkm/Double.valueOf(3600)));
 
 
                     for (int i=1;i<locationArrayList.size();i++)
@@ -188,7 +198,7 @@ public class MainActivity extends AppCompatActivity {
 
                     chronometer.stop();
                     graphCusotmView.invalidate();
-                    graphCusotmView.setVisibility(View.VISIBLE);
+                  // graphCusotmView.setVisibility(View.VISIBLE);
                 }
 
                 //GraphCusotmView ss=new GraphCusotmView(getApplicationContext(),integers,3);
@@ -217,16 +227,7 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-                startActivity(new Intent(getApplicationContext(),GraphiewActivity.class));
 
-            }
-        });
     }
 
     @Override
@@ -289,8 +290,12 @@ public class MainActivity extends AppCompatActivity {
 
                         Long timeperkm=((milliperkmend - milliperkmstart) / 1000);
                         //Double dspkm=(distanceInMetres/1000);
-
-                        PerkmArraylist.add(1/(timeperkm/Double.valueOf(3600)));
+                        Double avgspeekm=1/(timeperkm/Double.valueOf(3600));
+                        if(avgspeekm>0)
+                        {
+                        PerkmArraylist.add(avgspeekm);
+                        graphCusotmView.invalidate();
+                        }
                         Log.d("Eachkm","Speed = "+ 1/(timeperkm/Double.valueOf(3600)));
                         milliperkmstart=System.currentTimeMillis();
 
@@ -389,7 +394,8 @@ public class MainActivity extends AppCompatActivity {
     public ArrayList<Integer> getPerkmArraylist() {
         ArrayList<Integer> valvs=new ArrayList<>();
         Log.d("Perkm",""+PerkmArraylist.toString());
-        valvs.add(0);
+
+        valvs.add(1);
         for(int i=0;i<PerkmArraylist.size();i++)
         {
             valvs.add((int)Math.round(PerkmArraylist.get(i)));
@@ -427,7 +433,7 @@ public class MainActivity extends AppCompatActivity {
         ArrayList<Integer> valvs=new ArrayList<>();
         if(PerkmArraylist.size()>0)
         {
-        valvs.add(0);
+        valvs.add(1);
         for(int i=0;i<PerkmArraylist.size();i++)
         {
 

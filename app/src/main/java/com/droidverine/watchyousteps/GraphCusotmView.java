@@ -41,12 +41,7 @@ public class GraphCusotmView extends View {
 
 
 
-    public GraphCusotmView(Context context,ArrayList<Integer> PerkmArraylist,int MAX_KM) {
-        super(context);
-        init();
 
-
-    }
     public void setValues(ArrayList<Integer> PerkmArraylist, int MAX_KM) {
 
          this.PerkmArraylist=PerkmArraylist;
@@ -58,7 +53,7 @@ public class GraphCusotmView extends View {
     }
 
     public void setMAX_KM(int MAX_KM) {
-        invalidate();
+        //invalidate();
         this.MAX_KM = MAX_KM;
     }
 
@@ -75,13 +70,13 @@ public class GraphCusotmView extends View {
 
     public GraphCusotmView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init();
+       // init();
 
     }
 
     public GraphCusotmView(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
-        init();
+      //  init();
 
     }
 
@@ -104,7 +99,9 @@ public class GraphCusotmView extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
+
         Log.d("redraw","ll");
+
         MainActivity mainActivity=new MainActivity();
         Log.d("perkm",""+mainActivity.getPerkmArraylist());
         //eachkmArraylist.addAll(mainActivity.getPerkmArraylist());
@@ -121,7 +118,7 @@ public class GraphCusotmView extends View {
         StartY=20;
 
 
-        GraphiewActivity graphCusotmView=new GraphiewActivity();
+      //  GraphiewActivity graphCusotmView=new GraphiewActivity();
         //eachkmArraylist=graphCusotmView.getarray();
         //MAX_SPEED=graphCusotmView.getmax();
         Canvas g2=canvas;
@@ -307,7 +304,7 @@ public class GraphCusotmView extends View {
                     Log.d("s",""+pp );
             }
         }
-        invalidate();
+      //  invalidate();
 
 
     }
