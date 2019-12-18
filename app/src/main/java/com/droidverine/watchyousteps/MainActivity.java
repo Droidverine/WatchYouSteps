@@ -36,6 +36,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
+import java.text.DecimalFormat;
+
 
 
 
@@ -43,12 +45,15 @@ public class MainActivity extends AppCompatActivity {
     private LocationManager locationManager;
     LocationListener locationListener;
     Chronometer chronometer, chronometerkm;
+
     String langlong;
     TextView lc, TxttotalRun, Txtavgspeed, Txtavgspeedperkm;
     long eachkm;
     ArrayList<Location> locationArrayList=new ArrayList<>();
     public static ArrayList<Double> PerkmArraylist=new ArrayList<>();
     public  static Double dskm;
+    DecimalFormat df = new DecimalFormat("##.###");
+
     GraphCusotmView graphCusotmView;
     Double elapsed,finalkm;
     Button btnstart, btnstop;
@@ -174,8 +179,8 @@ public class MainActivity extends AppCompatActivity {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    TxttotalRun.setText("" + dskm);
-                    Txtavgspeed.setText("" + avgspeed);
+                    TxttotalRun.setText("Total Distance \n" + df.format(dskm));
+                    Txtavgspeed.setText("Avg Speed \n" + df.format(avgspeed));
 
                     distanceInMetres = 0.0;
                     lc.setText(""+distanceInMetres);
