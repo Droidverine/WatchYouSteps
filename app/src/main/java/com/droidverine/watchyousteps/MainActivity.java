@@ -45,7 +45,6 @@ public class MainActivity extends AppCompatActivity {
     private LocationManager locationManager;
     LocationListener locationListener;
     Chronometer chronometer, chronometerkm;
-
     String langlong;
     TextView lc, TxttotalRun, Txtavgspeed, Txtavgspeedperkm;
     long eachkm;
