@@ -36,9 +36,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.stream.Collectors;
+
 
 
 public class MainActivity extends AppCompatActivity {
@@ -52,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
     public static ArrayList<Double> PerkmArraylist=new ArrayList<>();
     public  static Double dskm;
     GraphCusotmView graphCusotmView;
-    Double elapsed;
+    Double elapsed,finalkm;
     Button btnstart, btnstop;
     static double distanceInMetres;
     static Location lastLocation = null;
@@ -82,16 +80,7 @@ public class MainActivity extends AppCompatActivity {
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + getResources().getString(R.string.app_name);
-                Log.d("Files", "Path: " + getFilesDir());
-                File directory = new File(getFilesDir()+"/");
-                File[] files = directory.listFiles();
-                Log.d("Files", "Size: "+ files.length);
-                for (int i = 0; i < files.length; i++)
-                {
-                    Log.d("Files", "FileName:" + files[i].getName());
-                }
-             //   startActivity(new Intent(getApplicationContext(),GraphiewActivity.class));
+              startActivity(new Intent(getApplicationContext(),ViewrunlogsActivity.class));
             }
         });
 
@@ -112,8 +101,6 @@ public class MainActivity extends AppCompatActivity {
                     milliperkmstart= System.currentTimeMillis();
                     PerkmArraylist.clear();
 
-                    //  Date dt = new Date(dtMili);
-
                     Log.d("GetTime", "" + (millistart));
                 }
 
@@ -124,19 +111,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (locationManager != null) {
-                   // chronometerkm.start();
                     locationManager.removeUpdates(locationListener);
                     Double ds=0.0;
                     millisend = System.currentTimeMillis();
                     Long timeperkm=((milliperkmend - milliperkmstart) / 1000);
 
-                  //  PerkmArraylist.add(1/(timeperkm/Double.valueOf(3600)));
 
 
                     for (int i=1;i<locationArrayList.size();i++)
                     {
-                        Location nextloc=null;
-
 
 
 
@@ -154,25 +137,22 @@ public class MainActivity extends AppCompatActivity {
                     //Avg speed= distanceinkm/timeinhr.
                     Double avgspeed = dskm/(avgtime/Double.valueOf(3600));
                     //For getting avg speed over whole run.
+                    if(PerkmArraylist.size()>0)
+                    {
+                        Long avgfinaltime=((millisend-milliperkmstart)/1000);
+                        Double finalkmavg=finalkm/1000;
+                        Log.d("last km","avg speed"+finalkmavg/(avgfinaltime/Double.valueOf(3600)));//((finalkm/1000)/(Double.valueOf(millisend-milliperkmstart)/1000)/3600));
+                        PerkmArraylist.add(finalkmavg/(avgfinaltime/Double.valueOf(3600)));
+                    }
 
                     locationArrayList.clear();
 
                     // locationManager = null;
+                    finalkm=0.0;
                     lc.setText("");
                     btnstop.setVisibility(View.GONE);
                     btnstart.setVisibility(View.VISIBLE);
-                    /*
-                    elapsed = Double.valueOf(SystemClock.elapsedRealtime() - chronometer.getBase());
-                    //Distance to km= distance * 1000
-                    Double avghr = ((elapsed / 1000) / 3600);
-                    Log.d("chrono Second", "" + (elapsed / 1000));
-                    Log.d("chrono hour", "" + avghr);
-                    Log.d("chrono distance in km", "" + distanceInMetres / 1000);
-                    //Avg speed= distanceinkm/timeinhr.
-                    Double avgspeed = (distanceInMetres / 1000) / avghr;
-                    Log.d("chrono speed", "" + avgspeed);
 
-                     */
                     Date currentTime = Calendar.getInstance().getTime();
 
                     File f = new File(getFilesDir(), currentTime + ".txt");
@@ -182,10 +162,14 @@ public class MainActivity extends AppCompatActivity {
                         bw.write("Date and Time \t" + currentTime + "\n");
                         bw.write("Distance Travelled \t" +dskm + "\n");
                         bw.write("Avg Speed \t" + avgspeed+"\n");
-
                         bw.write("Time Elapsed \t" + avgtime/Double.valueOf(3600));
+                        bw.write("\n");
+                        bw.write("Each km data\n");
 
-                        Log.d("ZALA", "GHE");
+                        for (int i=0;i<PerkmArraylist.size();i++)
+                        {
+                            bw.write(""+PerkmArraylist.get(i)+"\n");
+                        }
                         bw.close();
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -193,23 +177,21 @@ public class MainActivity extends AppCompatActivity {
                     TxttotalRun.setText("" + dskm);
                     Txtavgspeed.setText("" + avgspeed);
 
-                    distanceInMetres = 0;
+                    distanceInMetres = 0.0;
                     lc.setText(""+distanceInMetres);
-
+                    ds=0.0;
+                    finalkm=0.0;
                     chronometer.stop();
-                    graphCusotmView.invalidate();
-                  // graphCusotmView.setVisibility(View.VISIBLE);
+                    if(PerkmArraylist.size()>0)
+                    {   if(PerkmArraylist.get(0)>-1)
+                    {
+                        graphCusotmView.invalidate();
+                    }
+                    }
+
+                   /// locationManager=null;
+
                 }
-
-                //GraphCusotmView ss=new GraphCusotmView(getApplicationContext(),integers,3);
-                //ss.setMAX_KM(3);
-
-/*
-                Intent intent=new Intent(MainActivity.this,GraphiewActivity.class);
-                intent.putExtra("perkm",PerkmArraylist);
-                intent.putExtra("totdis",dskm);
-                startActivity(intent);
-                */
 
 
             }
@@ -276,7 +258,7 @@ public class MainActivity extends AppCompatActivity {
 
                 if (lastLocation != null) {
                     distanceInMetres += location.distanceTo(lastLocation);
-                    lc.setText("" +distanceInMetres / 1000 );
+                    lc.setText("" +distanceInMetres/1000 );
                     if(distanceInMetres==0)
                     {
 
@@ -284,6 +266,7 @@ public class MainActivity extends AppCompatActivity {
                     if(distanceInMetres>1000)
                     {
                         milliperkmend= System.currentTimeMillis();
+                       // finalkm=distanceInMetres;
                         distanceInMetres=0;
                         Log.d("Eachkm",""+(milliperkmend - milliperkmstart) / 1000);
 
@@ -298,30 +281,12 @@ public class MainActivity extends AppCompatActivity {
                         }
                         Log.d("Eachkm","Speed = "+ 1/(timeperkm/Double.valueOf(3600)));
                         milliperkmstart=System.currentTimeMillis();
-
-                        //  PerkmArraylist.add(1/(timeperkm/Double.valueOf(3600)));
-                    }
-
-                    /*
-                    Log.d("loc", "locationali " + distanceInMetres);
-                    eachkm = Math.round(distanceInMetres / 1000);
-                    //to get every km
-                    if (eachkm > 1) {
-                        Log.d("km complete", " km complete");
-                        eachkm = 0;
-                        millisend = System.currentTimeMillis();
-                        //  Date dt = new Date(dtMili);
-                        elapsed = Double.valueOf(SystemClock.elapsedRealtime() - chronometer.getBase());
-
-                        Log.d("GetTime", "" + 1/(millisend - millistart) / 1000);
-                      //  Log.d("GetTime", "" + elapsed / 1000);
-                        // Log.d("chrono per km hour", "" + avghr);
-                        // chronometerkm.stop();
+                        lc.setText("" +0.0 );
 
                     }
+                    finalkm=distanceInMetres;
 
-                    lc.setText("" + (distanceInMetres / 1000));
-                    */
+
 
                 }
                 lastLocation = location;
@@ -344,6 +309,9 @@ public class MainActivity extends AppCompatActivity {
                 if (s.equals(LocationManager.GPS_PROVIDER)) {
                     requestforgps();
                     lastLocation=null;
+                    dskm=0.0;
+                    finalkm=0.0;
+                    distanceInMetres=0.0;
                 }
 
 
@@ -401,31 +369,9 @@ public class MainActivity extends AppCompatActivity {
             valvs.add((int)Math.round(PerkmArraylist.get(i)));
 
         }
-        //Collections.copy(valvs,PerkmArraylist);
-     //   valvs.add(0);
 
 
-       // valvs.add(120);
 
-
-        /*
-        if(PerkmArraylist!=null || PerkmArraylist.isEmpty())
-        {
-        for(Double d : PerkmArraylist){
-            valvs.add(d.intValue());
-        }
-        return valvs;
-        }
-        else {
-            valvs.add(25);
-            valvs.add(1);
-
-            valvs.add(5);
-            valvs.add(10);
-            return valvs;
-
-        }
-        */
         return valvs;
 
     }

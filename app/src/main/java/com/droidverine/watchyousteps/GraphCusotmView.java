@@ -132,37 +132,7 @@ public class GraphCusotmView extends View {
 
             Log.d("Maxkm",""+MAX_KM);
 
-        /*
-        for(int i=0;i<PerkmArraylist.size();i++)
-        {
-            eachkmArraylist.add((int) Math.round(PerkmArraylist.get(i)));
-        }
-*/
-        /*
-        for(int i=0;i<PerkmArraylist.size();i++)
-        {
-            eachkmArraylist.add((int) Math.round(PerkmArraylist.get(i)));
-        }
 
-
-        eachkmArraylist.add(25);
-        eachkmArraylist.add(1);
-
-        eachkmArraylist.add(5);
-        eachkmArraylist.add(10);
-            eachkmArraylist.add(20);
-
-        eachkmArraylist.add(1);
-
-        eachkmArraylist.add(20);
-        eachkmArraylist.add(205);
-
-        eachkmArraylist.add(10);
-
-        eachkmArraylist.add(5);
-        eachkmArraylist.add(1);
-
-*/
 
         Y_HATCH_CNT= eachkmArraylist.size();
             split(MAX_SPEED,Y_HATCH_CNT,canvas);
@@ -304,7 +274,6 @@ public class GraphCusotmView extends View {
                     Log.d("s",""+pp );
             }
         }
-      //  invalidate();
 
 
     }

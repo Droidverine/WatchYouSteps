@@ -91,6 +91,8 @@ android:gravity="center_vertical"
         android:id="@+id/graphview1"
         android:layout_width="wrap_content"
         android:layout_height="220dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
          />
 
 </LinearLayout>
